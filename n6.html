@@ -7570,7 +7570,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [31]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span> <span class="c1"># библиотека для работы с табличными данными</span>
@@ -7592,7 +7592,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"A:</span><span class="se">\\</span><span class="s2">Programs</span><span class="se">\\</span><span class="s2">M_VS_Code_projects</span><span class="se">\\</span><span class="s2">jupyter</span><span class="se">\\</span><span class="s2">IPYNB-machine-learning</span><span class="se">\\</span><span class="s2">cardekho.csv"</span>
@@ -7639,7 +7639,7 @@ memory usage: 762.1 KB
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Выбор числовых признаков и очистка</span>
@@ -7675,7 +7675,7 @@ memory usage: 762.1 KB
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -7808,7 +7808,7 @@ memory usage: 762.1 KB
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span> <span class="c1"># создает объект для стандартизации данных (приведения к среднему 0 и стандартному отклонению 1)</span>
@@ -7834,7 +7834,7 @@ memory usage: 762.1 KB
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[22]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -7940,9 +7940,15 @@ memory usage: 762.1 KB
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h5>
-Silhouette Score: Измеряет, насколько объект похож на свой кластер по сравнению с другими. Чем ближе к 1, тем лучше.
-<p>Davies-Bouldin Score: Измеряет среднее "сходство" между кластерами. Чем ниже значение, тем лучше разделение кластеров.</p>
-<p>Calinski-Harabasz Score: Оценивает, насколько кластеры плотные и хорошо разделенные. Чем выше значение, тем лучше.</p>
+Silhouette Score (Коэффициент силуэта) — это метрика, используемая для оценки качества кластеризации. Она показывает, насколько хорошо объекты разделены на кластеры и насколько каждый объект похож на свой собственный кластер по сравнению с другими кластерами. Чем ближе к 1, тем лучше.
+<p>Davies-Bouldin Index (Индекс Дэвиса-Болдина) — это метрика для оценки качества кластеризации, которая измеряет "похожесть" между кластерами. Она показывает, насколько кластеры компактны внутри себя и насколько далеко они расположены друг от друга. Чем ниже значение, тем лучше разделение кластеров.</p>
+<p>Calinski-Harabasz Index (Индекс Калински-Харабаса) — это метрика для оценки качества кластеризации, основанная на анализе дисперсии. Она оценивает, насколько хорошо кластеры разделены и насколько они плотные. Чем выше значение, тем лучше.</p>
+<p>В итоге:</p>
+<ul>
+<li>Silhouette ↑ — объекты похожи на свои кластеры</li>
+<li>Davies-Bouldin ↓ — кластеры минимально пересекаются</li>
+<li>Calinski-Harabasz ↑ — кластеры очень плотные и далеко отстоят друг от друга</li>
+</ul>
 </h5>
 </div>
 </div>
@@ -7955,13 +7961,13 @@ Silhouette Score: Измеряет, насколько объект похож �
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h5>
-K-Means — это один из самых простых и популярных алгоритмов кластеризации. Он разделяет данные на заданное количество групп (кластеров) K.<br/>
+K-Means (K-средних) — это один из самых простых и популярных алгоритмов кластеризации, который разделяет данные на заданное количество групп (кластеров) K.<br/>
 Как работает:
 <ol>
-<li>Алгоритм случайным образом выбирает K точек в качестве центров кластеров</li>
-<li>Каждая точка данных приписывается к ближайшему центру</li>
-<li>Центры кластеров пересчитываются как среднее всех точек в кластере</li>
-<li>Шаги 2-3 повторяются, пока центры кластеров не перестанут меняться</li>
+<li>Инициализация: Алгоритм случайным образом выбирает K точек в качестве центров кластеров</li>
+<li>Назначение: Каждая точка данных приписывается к ближайшему центру</li>
+<li>Обновление: Центры кластеров пересчитываются как среднее всех точек в кластере</li>
+<li>Повторение: Шаги 2-3 повторяются, пока центры кластеров не перестанут меняться или изменения не станут минимальными</li>
 </ol>
 </h5>
 </div>
@@ -7972,7 +7978,7 @@ K-Means — это один из самых простых и популярны
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [32]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -8020,13 +8026,13 @@ Calinski-Harabasz Score: 3203.61
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h5>
-DBSCAN — это алгоритм кластеризации, основанный на плотности распределения точек. Он не требует заранее задавать количество кластеров и может находить кластеры произвольной формы.<br/>
+DBSCAN (Density-Based Spatial Clustering of Applications with Noise) — это алгоритм кластеризации, основанный на плотности распределения точек. Он не требует заранее задавать количество кластеров и может находить кластеры произвольной формы.<br/>
 Как работает:
 <ol>
-<li>Для каждой точки алгоритм проверяет, сколько других точек находится в её окрестности радиуса eps</li>
-<li>Если в окрестности достаточно много точек (больше min_samples), эта точка становится ядром кластера</li>
-<li>Все точки, достижимые из ядра, включаются в тот же кластер</li>
-<li>Точки, которые не попадают ни в один кластер, помечаются как шум (метка -1)</li>
+<li>Определение соседей: Для каждой точки алгоритм проверяет, сколько других точек находится в её окрестности радиуса eps</li>
+<li>Поиск ядерных точек: Если в окрестности точки находится не менее min_samples точек, она становится ядром кластера</li>
+<li>Расширение кластеров: Все точки, достижимые из ядра (находящиеся на расстоянии eps друг от друга), включаются в тот же кластер</li>
+<li>Определение шума: Точки, которые не попадают ни в один кластер, помечаются как шум (метка -1)</li>
 </ol>
 </h5>
 </div>
@@ -8037,7 +8043,7 @@ DBSCAN — это алгоритм кластеризации, основанн�
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [34]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">dbscan</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -8098,13 +8104,19 @@ Calinski-Harabasz Score: 409.54
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h5>
-GMM — это вероятностная модель, которая предполагает, что данные порождены смесью нескольких многомерных гауссовских (нормальных) распределений. Это "мягкая" кластеризация — каждая точка может принадлежать разным кластерам с разной вероятностью.<br/>
+GMM (Gaussian Mixture Model — Смесь гауссовских распределений) — это вероятностная модель, которая предполагает, что данные порождены смесью нескольких многомерных гауссовских (нормальных) распределений. Это алгоритм "мягкой" кластеризации — каждая точка может принадлежать разным кластерам с разной вероятностью.<br/>
 Как работает:
 <ol>
-<li>Модель предполагает, что данные состоят из K гауссовских распределений</li>
-<li>Алгоритм подбирает параметры каждого распределения: среднее, ковариацию и вес</li>
-<li>Для каждой точки вычисляется вероятность принадлежности к каждому кластеру</li>
-<li>Точка относится к тому кластеру, вероятность принадлежности к которому максимальна</li>
+<li>Предположение: Данные состоят из K гауссовских распределений (компонентов), каждое со своими параметрами: среднее, ковариационная матрица и вес</li>
+<li>
+    EM-алгоритм (Expectation-Maximization):
+    <ul>
+<li>E-шаг: Оценка вероятностей принадлежности каждой точки к каждому кластеру</li>
+<li>M-шаг: Пересчет параметров распределений на основе текущих вероятностей</li>
+</ul>
+</li>
+<li>Повторение: Шаги повторяются до сходимости</li>
+<li>Финальное назначение: Каждая точка относится к тому кластеру, вероятность принадлежности к которому максимальна</li>
 </ol>
 </h5>
 </div>
@@ -8115,7 +8127,7 @@ GMM — это вероятностная модель, которая пред�
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [35]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">gmm</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># n_components=3 — количество компонентов (кластеров) в смеси</span>
@@ -8162,8 +8174,8 @@ Calinski-Harabasz Score: 1729.18
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h5>Анализ:
 <ul>
-<li>Все три модели показали довольно низкие значения Silhouette Score (около 0.2), что говорит о том, что кластеры не очень хорошо разделены и могут перекрываться.</li>
-<li>DBSCAN выделился на фоне других, показав лучшие результаты по всем трем метрикам. Он смог идентифицировать 6 кластеров, отбросив 250 точек как шум. Более высокий Silhouette Score и Calinski-Harabasz Score, а также более низкий Davies-Bouldin Score указывают на то, что кластеры, найденные DBSCAN, более плотные и компактные. Это говорит о том, что данные имеют сложную структуру с областями разной плотности, которую алгоритмы, основанные на центроидах (K-Means, GMM), улавливают хуже..</li>
+<li>Все три модели показали довольно низкие значения Silhouette Score (около 0.3), что говорит о том, что кластеры не очень хорошо разделены и могут перекрываться.</li>
+<li>K-Means показал наиболее сбалансированные результаты: лучший Silhouette Score (0.4484) и самый высокий Calinski-Harabasz Score (3203.61), что говорит о более плотных и компактных кластерах, хотя Davies-Bouldin у него хуже, чем у DBSCAN.</li>
 </ul></h5>
 </div>
 </div>
@@ -8176,7 +8188,7 @@ Calinski-Harabasz Score: 1729.18
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h4>3. Понижение размерности.</h4>
-<h5>PCA — метод уменьшения размерности данных, который позволяет "сжать" информацию из множества признаков в меньшее количество новых признаков (главных компонент) с минимальными потерями информации.</h5>
+<h5>PCA (Principal Component Analysis — Метод главных компонент) — это алгоритм уменьшения размерности данных, который позволяет "сжать" информацию из множества признаков в меньшее количество новых признаков (главных компонент) с минимальными потерями информации.</h5>
 </div>
 </div>
 </div>
@@ -8185,7 +8197,7 @@ Calinski-Harabasz Score: 1729.18
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [37]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># создает модель PCA для уменьшения размерности до 2 компонент</span>
@@ -8195,6 +8207,7 @@ Calinski-Harabasz Score: 1729.18
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Объясненная дисперсия двумя компонентами: </span><span class="si">{</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <span class="c1"># .explained_variance_ratio_ — массив долей дисперсии, объясненной каждой главной компонентой</span>
 <span class="c1"># .sum() — суммирует доли дисперсии для выбранных компонент (сколько информации сохранили)</span>
+<span class="c1"># Дисперсия — это мера того, насколько сильно разбросаны данные. Если данные "кучкуются" в одной точке — дисперсия маленькая. Если данные "размазаны" широко — дисперсия большая.</span>
 </pre></div>
 </div>
 </div>
@@ -8241,7 +8254,7 @@ Calinski-Harabasz Score: 1729.18
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [38]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">kmeans_pca</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -8294,7 +8307,7 @@ Calinski-Harabasz Score: 6406.00
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [39]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">dbscan_pca</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># eps изменен на 0.4 (было 0.7), так как после PCA данные имеют другую структуру и масштаб.</span>
@@ -8349,7 +8362,7 @@ Calinski-Harabasz Score: 1072.43
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h5>Gaussian Mixture Model (GMM).</h5>
+<h5>GMM.</h5>
 </div>
 </div>
 </div>
@@ -8358,7 +8371,7 @@ Calinski-Harabasz Score: 1072.43
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [40]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">gmm_pca</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -8411,18 +8424,18 @@ Calinski-Harabasz Score: 4850.42
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">table_md</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">| Модель | Silhouette ↑ | Davies-Bouldin ↓ | Calinski-Harabasz ↑ |</span>
 <span class="s2">|--------|--------------|------------------|----------------------|</span>
-<span class="s2">| K-Means | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.2f}</span><span class="s2"> |</span>
-<span class="s2">| DBSCAN | **</span><span class="si">{:.4f}</span><span class="s2">** | **</span><span class="si">{:.4f}</span><span class="s2">** | **</span><span class="si">{:.2f}</span><span class="s2">** |</span>
+<span class="s2">| **K-Means** | **</span><span class="si">{:.4f}</span><span class="s2">** | </span><span class="si">{:.4f}</span><span class="s2"> | **</span><span class="si">{:.2f}</span><span class="s2">** |</span>
+<span class="s2">| DBSCAN | </span><span class="si">{:.4f}</span><span class="s2"> | **</span><span class="si">{:.4f}</span><span class="s2">** | </span><span class="si">{:.2f}</span><span class="s2"> |</span>
 <span class="s2">| GMM | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.2f}</span><span class="s2"> |</span>
-<span class="s2">| **K-Means (PCA)** | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.2f}</span><span class="s2"> |</span>
-<span class="s2">| **DBSCAN (PCA)** | **</span><span class="si">{:.4f}</span><span class="s2">** | **</span><span class="si">{:.4f}</span><span class="s2">** | **</span><span class="si">{:.2f}</span><span class="s2">** |</span>
-<span class="s2">| **GMM (PCA)** | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.2f}</span><span class="s2"> |</span>
+<span class="s2">| K-Means (PCA) | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.4f}</span><span class="s2"> | **</span><span class="si">{:.2f}</span><span class="s2">** |</span>
+<span class="s2">| **DBSCAN (PCA)** | **</span><span class="si">{:.4f}</span><span class="s2">** | **</span><span class="si">{:.4f}</span><span class="s2">** | </span><span class="si">{:.2f}</span><span class="s2"> |</span>
+<span class="s2">| GMM (PCA) | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.4f}</span><span class="s2"> | </span><span class="si">{:.2f}</span><span class="s2"> |</span>
 <span class="s2">"""</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
     <span class="n">sil_kmeans</span><span class="p">,</span> <span class="n">db_kmeans</span><span class="p">,</span> <span class="n">ch_kmeans</span><span class="p">,</span>
     <span class="n">sil_dbscan</span><span class="p">,</span> <span class="n">db_dbscan</span><span class="p">,</span> <span class="n">ch_dbscan</span><span class="p">,</span>
@@ -8456,16 +8469,16 @@ Calinski-Harabasz Score: 4850.42
 </thead>
 <tbody>
 <tr>
-<td>K-Means</td>
-<td>0.4484</td>
+<td><strong>K-Means</strong></td>
+<td><strong>0.4484</strong></td>
 <td>1.0106</td>
-<td>3203.61</td>
+<td><strong>3203.61</strong></td>
 </tr>
 <tr>
 <td>DBSCAN</td>
-<td><strong>-0.0317</strong></td>
+<td>-0.0317</td>
 <td><strong>0.8953</strong></td>
-<td><strong>409.54</strong></td>
+<td>409.54</td>
 </tr>
 <tr>
 <td>GMM</td>
@@ -8474,19 +8487,19 @@ Calinski-Harabasz Score: 4850.42
 <td>1729.18</td>
 </tr>
 <tr>
-<td><strong>K-Means (PCA)</strong></td>
+<td>K-Means (PCA)</td>
 <td>0.5467</td>
 <td>0.7150</td>
-<td>6406.00</td>
+<td><strong>6406.00</strong></td>
 </tr>
 <tr>
 <td><strong>DBSCAN (PCA)</strong></td>
 <td><strong>0.6150</strong></td>
 <td><strong>0.2928</strong></td>
-<td><strong>1072.43</strong></td>
+<td>1072.43</td>
 </tr>
 <tr>
-<td><strong>GMM (PCA)</strong></td>
+<td>GMM (PCA)</td>
 <td>0.5249</td>
 <td>0.9491</td>
 <td>4850.42</td>
@@ -8506,16 +8519,16 @@ Calinski-Harabasz Score: 4850.42
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h5>Влияние понижения размерности: PCA оказало крайне положительное влияние на качество кластеризации для всех трех моделей. Это видно по улучшению всех метрик:
 <ul>
-<li>Значение Silhouette выросло для всех моделей (с ~0.2 до ~0.27-0.30), что указывает на формирование более четких и разделенных кластеров.</li>
-<li>Показатель Calinski-Harabasz увеличился в 3-4 раза, что говорит о значительно большей плотности и разделимости кластеров в новом двухмерном пространстве.</li>
+<li>Значение Silhouette выросло для всех моделей, что указывает на формирование более четких и разделенных кластеров.</li>
 <li>Davies-Bouldin снизился, особенно для DBSCAN, что подтверждает улучшение качества.</li>
+<li>Показатель Calinski-Harabasz увеличился в 3 раза, что говорит о значительно большей плотности и разделимости кластеров в новом двухмерном пространстве.</li>
 </ul>
 Сравнение моделей после PCA:
 <ul>
-<li>GMM и K-Means показали очень близкие результаты. GMM немного обошел K-Means по Silhouette Score, но уступил по Davies-Bouldin. Оба алгоритма, работающие по принципу "мягкого" и "жесткого" разбиения на сферические кластеры, дали схожую и неплохую картину.</li>
-<li>DBSCAN снова показал себя лучшим по двум ключевым метрикам: он имеет самый низкий (лучший) Davies-Bouldin Score (0.99), что означает минимальное пересечение между кластерами, и самый высокий (лучший) Calinski-Harabasz Score (6555), что говорит о высокой плотности и хорошей разделимости найденных групп. Его Silhouette Score немного ниже, чем у GMM/K-Means, что может быть связано с наличием шума и спецификой расчета метрики, но в целом результат очень достойный.</li>
+<li>GMM и K-Means показали близкие результаты. GMM немного обошел K-Means по Davies-Bouldin, но уступил по Silhouette Score.</li>
+<li>DBSCAN показал себя лучшим по двум метрикам: он имеет самый низкий (лучший) Davies-Bouldin Score (0.29), что означает минимальное пересечение между кластерами, и самый высокий (лучший) Silhouette Score (0.615), что говорит о схожести объектов с кластером.</li>
 </ul>
-Наилучшая модель: Учитывая, что DBSCAN изначально лучше справлялся со сложной структурой данных, а после PCA его преимущество в ключевых метриках (Davies-Bouldin и Calinski-Harabasz) стало еще более явным, наилучшей моделью для данного набора данных можно считать DBSCAN после понижения размерности с помощью PCA.</h5>
+Наилучшая модель: наилучшей моделью для данного набора данных можно считать DBSCAN после понижения размерности с помощью PCA.</h5>
 </div>
 </div>
 </div>
