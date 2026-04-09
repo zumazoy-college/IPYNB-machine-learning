@@ -1,0 +1,7 @@
+pandas
+flask
+python-telegram-bot
+python-dotenv
+scikit-learn
+numpy
+winsound

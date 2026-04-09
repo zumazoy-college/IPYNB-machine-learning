@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система рекомендаций игр Steam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .game-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .game-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .info-item {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .compatibility {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .filter-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 18px;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .review-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .review-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #667eea;
+        }
+
+        .review-rating {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .stats-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Система рекомендаций игр Steam</h1>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('recommend')">Рекомендации</button>
+            <button class="tab" onclick="showTab('worst')">Худшие игры</button>
+            <button class="tab" onclick="showTab('range')">Поиск по диапазону</button>
+            <button class="tab" onclick="showTab('reviews')">Отзывы</button>
+            <button class="tab" onclick="showTab('stats')">Статистика</button>
+            <button class="tab" onclick="showTab('personal')">Персональные</button>
+            <button class="tab" onclick="showTab('profile')">Мой профиль</button>
+            <button class="tab" onclick="showTab('querystats')">Статистика запросов</button>
+            <button class="tab" onclick="showTab('train')">Обучение</button>
+        </div>
+
+        <!-- Рекомендации -->
+        <div id="recommend" class="tab-content active">
+            <div class="search-box">
+                <input type="text" id="query" placeholder="Введите запрос (например: популярный shooter)">
+                <button onclick="getRecommendations()" style="margin-top: 10px;">Найти игры</button>
+            </div>
+            <div id="recommend-results" class="results"></div>
+        </div>
+
+        <!-- Худшие игры -->
+        <div id="worst" class="tab-content">
+            <button onclick="getWorstGames()">Показать топ-5 худших игр</button>
+            <div id="worst-results" class="results"></div>
+        </div>
+
+        <!-- Поиск по диапазону -->
+        <div id="range" class="tab-content">
+            <div class="filter-group">
+                <div class="filter-item">
+                    <label>Мин. рейтинг (0-100):</label>
+                    <input type="number" id="min_rating" value="0" min="0" max="100">
+                </div>
+                <div class="filter-item">
+                    <label>Макс. рейтинг (0-100):</label>
+                    <input type="number" id="max_rating" value="100" min="0" max="100">
+                </div>
+                <div class="filter-item">
+                    <label>Мин. цена ($):</label>
+                    <input type="number" id="min_price" value="0" min="0" step="0.01">
+                </div>
+                <div class="filter-item">
+                    <label>Макс. цена ($):</label>
+                    <input type="number" id="max_price" value="100" min="0" step="0.01">
+                </div>
+                <div class="filter-item">
+                    <label>Мин. год:</label>
+                    <input type="number" id="min_year" value="2015" min="1980" max="2030">
+                </div>
+                <div class="filter-item">
+                    <label>Макс. год:</label>
+                    <input type="number" id="max_year" value="2019" min="1980" max="2030">
+                </div>
+            </div>
+            <button onclick="searchByRange()">Найти игры</button>
+            <div id="range-results" class="results"></div>
+        </div>
+
+        <!-- Отзывы -->
+        <div id="reviews" class="tab-content">
+            <div class="review-form">
+                <h3>Добавить отзыв</h3>
+                <input type="text" id="review_game" placeholder="Название игры" style="margin-bottom: 10px;">
+                <textarea id="review_text" placeholder="Текст отзыва" rows="4" style="margin-bottom: 10px;"></textarea>
+                <input type="number" id="review_rating" placeholder="Оценка (1-10)" min="1" max="10" style="margin-bottom: 10px;">
+                <button onclick="addReview()">Добавить отзыв</button>
+            </div>
+
+            <h3>Просмотр отзывов</h3>
+            <input type="text" id="show_reviews_game" placeholder="Название игры" style="margin-bottom: 10px;">
+            <button onclick="showReviews()">Показать отзывы</button>
+            <div id="reviews-results" class="results"></div>
+        </div>
+
+        <!-- Статистика -->
+        <div id="stats" class="tab-content">
+            <button onclick="getStatistics()">Загрузить статистику</button>
+            <div id="stats-results" class="results"></div>
+        </div>
+
+        <!-- Персональные рекомендации -->
+        <div id="personal" class="tab-content">
+            <button onclick="getPersonalRecommendations()">Получить персональные рекомендации</button>
+            <div id="personal-results" class="results"></div>
+        </div>
+
+        <!-- Мой профиль -->
+        <div id="profile" class="tab-content">
+            <button onclick="getUserProfile()">Загрузить мой профиль</button>
+            <div id="profile-results" class="results"></div>
+        </div>
+
+        <!-- Статистика запросов -->
+        <div id="querystats" class="tab-content">
+            <button onclick="getQueryStatistics()">Загрузить статистику запросов</button>
+            <div id="querystats-results" class="results"></div>
+        </div>
+
+        <!-- Обучение модели -->
+        <div id="train" class="tab-content">
+            <button onclick="trainModel()">Обучить модель</button>
+            <div id="train-results" class="results"></div>
+        </div>
+    </div>
+
+    <script>
+        // Звуковое сопровождение
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playBeep(frequency = 1000, duration = 200) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration / 1000);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration / 1000);
+        }
+
+        function playRecommendationSound() {
+            playBeep(1000, 200);
+        }
+
+        function playSuccessSound() {
+            playBeep(800, 150);
+            setTimeout(() => playBeep(1200, 150), 150);
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        async function getRecommendations() {
+            const query = document.getElementById('query').value;
+            const resultsDiv = document.getElementById('recommend-results');
+
+            if (!query) {
+                resultsDiv.innerHTML = '<div class="error">Введите запрос</div>';
+                return;
+            }
+
+            resultsDiv.innerHTML = '<div class="loading">Загрузка...</div>';
+
+            try {
+                const response = await fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({query: query, top_k: 5})
+                });
+
+                const data = await response.json();
+
+                if (data.recommendations.length === 0) {
+                    resultsDiv.innerHTML = '<p>Игры не найдены</p>';
+                    return;
+                }
+
+                let html = '<h2>Рекомендации:</h2>';
+                data.recommendations.forEach((game, index) => {
+                    html += `
+                        <div class="game-card">
+                            <h3>${index + 1}. ${game.name}</h3>
+                            <div class="game-info">
+                                <div class="info-item"><span class="info-label">Жанр:</span> ${game.genre}</div>
+                                <div class="info-item"><span class="info-label">Разработчик:</span> ${game.developer}</div>
+                                <div class="info-item"><span class="info-label">Издатель:</span> ${game.publisher}</div>
+                                <div class="info-item"><span class="info-label">Дата выхода:</span> ${game.release_date}</div>
+                                <div class="info-item"><span class="info-label">Цена:</span> ${game.price}</div>
+                                <div class="info-item"><span class="info-label">Рейтинг:</span> ${game.rating}%</div>
+                            </div>
+                            <span class="compatibility">Совместимость: ${game.compatibility}%</span>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+
+                // Воспроизведение звука при успешной рекомендации
+                playRecommendationSound();
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function getWorstGames() {
+            const resultsDiv = document.getElementById('worst-results');
+            resultsDiv.innerHTML = '<div class="loading">Загрузка...</div>';
+
+            try {
+                const response = await fetch('/api/worst?top_k=5');
+                const data = await response.json();
+
+                let html = '<h2>Топ-5 худших игр:</h2>';
+                data.worst_games.forEach((game, index) => {
+                    html += `
+                        <div class="game-card">
+                            <h3>${index + 1}. ${game.name}</h3>
+                            <div class="game-info">
+                                <div class="info-item"><span class="info-label">Жанр:</span> ${game.genre}</div>
+                                <div class="info-item"><span class="info-label">Разработчик:</span> ${game.developer}</div>
+                                <div class="info-item"><span class="info-label">Дата выхода:</span> ${game.release_date}</div>
+                                <div class="info-item"><span class="info-label">Цена:</span> ${game.price}</div>
+                                <div class="info-item"><span class="info-label">Рейтинг:</span> ${game.rating}%</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function searchByRange() {
+            const resultsDiv = document.getElementById('range-results');
+            resultsDiv.innerHTML = '<div class="loading">Загрузка...</div>';
+
+            const params = {
+                min_rating: parseInt(document.getElementById('min_rating').value),
+                max_rating: parseInt(document.getElementById('max_rating').value),
+                min_price: parseFloat(document.getElementById('min_price').value),
+                max_price: parseFloat(document.getElementById('max_price').value),
+                min_year: parseInt(document.getElementById('min_year').value),
+                max_year: parseInt(document.getElementById('max_year').value),
+                top_k: 10
+            };
+
+            try {
+                const response = await fetch('/api/search_range', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(params)
+                });
+
+                const data = await response.json();
+
+                if (data.games.length === 0) {
+                    resultsDiv.innerHTML = '<p>Игры не найдены в указанном диапазоне</p>';
+                    return;
+                }
+
+                let html = `<h2>Найдено игр: ${data.count}</h2>`;
+                data.games.forEach((game, index) => {
+                    html += `
+                        <div class="game-card">
+                            <h3>${index + 1}. ${game.name}</h3>
+                            <div class="game-info">
+                                <div class="info-item"><span class="info-label">Жанр:</span> ${game.genre}</div>
+                                <div class="info-item"><span class="info-label">Рейтинг:</span> ${game.rating}%</div>
+                                <div class="info-item"><span class="info-label">Цена:</span> $${game.price}</div>
+                                <div class="info-item"><span class="info-label">Год:</span> ${game.year}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function addReview() {
+            const game_name = document.getElementById('review_game').value;
+            const review_text = document.getElementById('review_text').value;
+            const rating = parseInt(document.getElementById('review_rating').value);
+
+            if (!game_name || !review_text || !rating) {
+                alert('Заполните все поля');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/review', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({game_name, review_text, rating})
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Отзыв добавлен!');
+                    document.getElementById('review_game').value = '';
+                    document.getElementById('review_text').value = '';
+                    document.getElementById('review_rating').value = '';
+                }
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
+        }
+
+        async function showReviews() {
+            const game_name = document.getElementById('show_reviews_game').value;
+            const resultsDiv = document.getElementById('reviews-results');
+
+            if (!game_name) {
+                resultsDiv.innerHTML = '<div class="error">Введите название игры</div>';
+                return;
+            }
+
+            resultsDiv.innerHTML = '<div class="loading">Загрузка...</div>';
+
+            try {
+                const response = await fetch(`/api/reviews/${encodeURIComponent(game_name)}`);
+                const data = await response.json();
+
+                if (data.reviews.length === 0) {
+                    resultsDiv.innerHTML = '<p>Для этой игры пока нет отзывов</p>';
+                    return;
+                }
+
+                let html = `<h2>Отзывы для "${game_name}" (${data.count})</h2>`;
+                data.reviews.forEach((review, index) => {
+                    html += `
+                        <div class="review-card">
+                            <div><strong>Отзыв #${index + 1}</strong> (${review.date})</div>
+                            <div class="review-rating">Оценка: ${review.rating}/10</div>
+                            <div style="margin-top: 10px;">${review.text}</div>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function getStatistics() {
+            const resultsDiv = document.getElementById('stats-results');
+            resultsDiv.innerHTML = '<div class="loading">Загрузка...</div>';
+
+            try {
+                const response = await fetch('/api/statistics');
+                const data = await response.json();
+
+                if (data.statistics.length === 0) {
+                    resultsDiv.innerHTML = '<p>Нет данных для статистики</p>';
+                    return;
+                }
+
+                let html = `<h2>Статистика по играм (${data.count})</h2>`;
+                data.statistics.forEach((stat, index) => {
+                    html += `
+                        <div class="stats-card">
+                            <h3>${index + 1}. ${stat.game}</h3>
+                            <div><strong>Отзывов:</strong> ${stat.reviews_count}</div>
+                            <div><strong>Средняя оценка:</strong> ${stat.avg_rating}/10</div>
+                            <div><strong>Последний отзыв:</strong> ${stat.latest_review}</div>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function getPersonalRecommendations() {
+            const resultsDiv = document.getElementById('personal-results');
+            resultsDiv.innerHTML = '<div class="loading">Загрузка...</div>';
+
+            try {
+                const response = await fetch('/api/personal', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({user_id: 'web_user', top_k: 5})
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultsDiv.innerHTML = '<p>' + data.error + '</p>';
+                    return;
+                }
+
+                playRecommendationSound();
+
+                let html = '<h2>Персональные рекомендации:</h2>';
+                data.recommendations.forEach((game, index) => {
+                    html += `
+                        <div class="game-card">
+                            <h3>${index + 1}. ${game.name}</h3>
+                            <div class="game-info">
+                                <div class="info-item"><span class="info-label">Жанр:</span> ${game.genre}</div>
+                                <div class="info-item"><span class="info-label">Разработчик:</span> ${game.developer}</div>
+                                <div class="info-item"><span class="info-label">Дата выхода:</span> ${game.release_date}</div>
+                                <div class="info-item"><span class="info-label">Цена:</span> ${game.price}</div>
+                                <div class="info-item"><span class="info-label">Рейтинг:</span> ${game.rating}%</div>
+                            </div>
+                            <span class="compatibility">Совместимость: ${game.compatibility}%</span>
+                        </div>
+                    `;
+                });
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function getUserProfile() {
+            const resultsDiv = document.getElementById('profile-results');
+            resultsDiv.innerHTML = '<div class="loading">Загрузка...</div>';
+
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({user_id: 'web_user'})
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultsDiv.innerHTML = '<p>' + data.error + '</p>';
+                    return;
+                }
+
+                const profile = data.profile;
+                let html = '<h2>Ваш профиль:</h2>';
+                html += `<div class="stats-card">`;
+                html += `<div><strong>Всего запросов:</strong> ${profile.total_queries}</div>`;
+
+                html += `<h3>Любимые жанры:</h3>`;
+                profile.favorite_genres.forEach(([genre, count]) => {
+                    if (count > 0) {
+                        html += `<div>• ${genre}: ${count} раз</div>`;
+                    }
+                });
+
+                html += `<h3>Любимые характеристики:</h3>`;
+                profile.favorite_characteristics.forEach(([char, count]) => {
+                    if (count > 0) {
+                        html += `<div>• ${char}: ${count} раз</div>`;
+                    }
+                });
+
+                html += `<div style="margin-top: 15px;"><strong>Последний запрос:</strong> ${profile.last_query}</div>`;
+                html += `<div><strong>Время:</strong> ${profile.last_query_time}</div>`;
+                html += `</div>`;
+
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function getQueryStatistics() {
+            const resultsDiv = document.getElementById('querystats-results');
+            resultsDiv.innerHTML = '<div class="loading">Загрузка...</div>';
+
+            try {
+                const response = await fetch('/api/query_statistics');
+                const data = await response.json();
+
+                if (!data.statistics) {
+                    resultsDiv.innerHTML = '<p>Нет данных для статистики</p>';
+                    return;
+                }
+
+                const stats = data.statistics;
+                let html = '<h2>Статистика запросов:</h2>';
+                html += `<div class="stats-card">`;
+                html += `<div><strong>Всего запросов:</strong> ${stats.total_queries}</div>`;
+                html += `<div><strong>Уникальных пользователей:</strong> ${stats.unique_users}</div>`;
+                html += `<div><strong>Среднее запросов на пользователя:</strong> ${stats.avg_queries_per_user}</div>`;
+                html += `</div>`;
+
+                html += `<h3>Популярные запросы:</h3>`;
+                stats.popular_queries.slice(0, 5).forEach(([query, count]) => {
+                    html += `<div class="stats-card">• ${query}: ${count} раз</div>`;
+                });
+
+                html += `<h3>Популярные жанры:</h3>`;
+                stats.popular_genres.slice(0, 5).forEach(([genre, count]) => {
+                    if (count > 0) {
+                        html += `<div class="stats-card">• ${genre}: ${count} упоминаний</div>`;
+                    }
+                });
+
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        async function trainModel() {
+            const resultsDiv = document.getElementById('train-results');
+            resultsDiv.innerHTML = '<div class="loading">Обучение модели...</div>';
+
+            try {
+                const response = await fetch('/api/train', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultsDiv.innerHTML = '<p>' + data.error + '</p>';
+                    return;
+                }
+
+                playSuccessSound();
+
+                const model = data.model;
+                let html = '<h2>Модель обучена!</h2>';
+                html += `<div class="stats-card">`;
+                html += `<div><strong>Обучающих примеров:</strong> ${model.training_samples}</div>`;
+                html += `<div><strong>Время обучения:</strong> ${model.trained_at}</div>`;
+                html += `<div><strong>Самый популярный жанр:</strong> ${model.most_popular_genre || 'N/A'}</div>`;
+                html += `<div><strong>Самая популярная характеристика:</strong> ${model.most_popular_characteristic || 'N/A'}</div>`;
+                html += `</div>`;
+
+                html += `<h3>Веса жанров:</h3>`;
+                const sortedGenres = Object.entries(model.genre_weights).sort((a, b) => b[1] - a[1]).slice(0, 5);
+                sortedGenres.forEach(([genre, weight]) => {
+                    html += `<div class="stats-card">• ${genre}: ${weight}</div>`;
+                });
+
+                html += `<p style="margin-top: 20px;">Модель сохранена в файл: trained_model.json</p>`;
+
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = '<div class="error">Ошибка: ' + error.message + '</div>';
+            }
+        }
+
+        // Enter для поиска
+        document.getElementById('query').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') getRecommendations();
+        });
+    </script>
+</body>
+</html>
