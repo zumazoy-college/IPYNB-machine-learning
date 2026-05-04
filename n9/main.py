@@ -588,30 +588,6 @@ def main():
                 print("\nМодель сохранена в файл: trained_model.json")
             continue
 
-        # ML Регрессия (sklearn)
-        if query.lower() in ['ml регрессия', 'ml regression', 'регрессия', 'regression']:
-            print('\n--- МАШИННОЕ ОБУЧЕНИЕ: ЛИНЕЙНАЯ РЕГРЕССИЯ ---')
-            try:
-                from sklearn_ml import train_price_prediction_model
-                model_info = train_price_prediction_model(df)
-                if model_info:
-                    play_sound_async(play_success_sound)
-            except Exception as e:
-                print(f"Ошибка: {e}")
-            continue
-
-        # ML Кластеризация (sklearn)
-        if query.lower() in ['ml кластеризация', 'ml clustering', 'кластеризация', 'clustering']:
-            print('\n--- МАШИННОЕ ОБУЧЕНИЕ: КЛАСТЕРНЫЙ АНАЛИЗ ---')
-            try:
-                from sklearn_ml import perform_clustering_analysis
-                clustering_info = perform_clustering_analysis(df)
-                if clustering_info:
-                    play_sound_async(play_success_sound)
-            except Exception as e:
-                print(f"Ошибка: {e}")
-            continue
-
         # Рекомендации
         print('\n--- РЕКОМЕНДАЦИИ ---')
         results = simple_recommendation_system(query)
