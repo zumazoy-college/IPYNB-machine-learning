@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product }} - ML-Продукт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">ML-Анализ Отзывов</h1>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Главная</a></li>
+                <li><a href="{{ url_for('statistics') }}">Статистика</a></li>
+                <li><a href="{{ url_for('models_page') }}">Модели</a></li>
+            </ul>
+            <div class="user-info">
+                <span>ID: {{ session.get('user_id', 'unknown')[:8] }}</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <h2>{{ product }}</h2>
+
+        {% if stats %}
+        <div class="product-stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">*</div>
+                <div class="stat-value">{{ "%.2f"|format(stats.avg_rating) }}</div>
+                <div class="stat-label">Средний рейтинг</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">#</div>
+                <div class="stat-value">{{ stats.total_reviews }}</div>
+                <div class="stat-label">Всего отзывов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">+</div>
+                <div class="stat-value">{{ stats.positive_count }}</div>
+                <div class="stat-label">Позитивных</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">-</div>
+                <div class="stat-value">{{ stats.negative_count }}</div>
+                <div class="stat-label">Негативных</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <h3>Отзывы о товаре</h3>
+            {% if reviews %}
+            <div class="reviews-list">
+                {% for review in reviews %}
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="rating">{{ review.rating }} звезд</span>
+                        {% if review.sentiment and review.sentiment == review.sentiment %}
+                        <span class="sentiment {{ 'positive' if review.sentiment == 'позитивный' else 'negative' }}">
+                            {{ review.sentiment }} ({{ "%.1f"|format(review.confidence) }}%)
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="review-text">{{ review.text }}</div>
+                    <div class="review-meta">
+                        <span>{{ review.user_id[:8] }}</span>
+                        <span>{{ review.date[:10] }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="info-message">Пока нет отзывов об этом товаре</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Вернуться на главную</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>ML-Продукт для анализа отзывов | Powered by Flask, scikit-learn, XGBoost</p>
+        </div>
+    </footer>
+</body>
+</html>

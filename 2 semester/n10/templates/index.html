@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML-Продукт: Анализ отзывов</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">ML-Анализ Отзывов</h1>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}" class="active">Главная</a></li>
+                <li><a href="{{ url_for('statistics') }}">Статистика</a></li>
+                <li><a href="{{ url_for('models_page') }}">Модели</a></li>
+            </ul>
+            <div class="user-info">
+                <span>ID: {{ user_id }}</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <div class="hero">
+            <h2>Добро пожаловать в систему анализа отзывов!</h2>
+            <p>Оставьте отзыв о товаре и получите мгновенный анализ тональности с помощью машинного обучения</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">{{ total_reviews }}</div>
+                <div class="stat-label">Всего отзывов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ total_users }}</div>
+                <div class="stat-label">Пользователей</div>
+            </div>
+        </div>
+
+        <div class="two-column">
+            <div class="column">
+                <div class="card">
+                    <h3>Оставить отзыв</h3>
+                    <form id="reviewForm" method="POST" action="{{ url_for('submit_review') }}">
+                        <div class="form-group">
+                            <label for="product">Товар:</label>
+                            <select name="product" id="product" required>
+                                {% for product in products %}
+                                <option value="{{ product }}">{{ product }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rating">Оценка:</label>
+                            <div class="rating-input">
+                                {% for i in range(1, 6) %}
+                                <input type="radio" name="rating" id="rating{{ i }}" value="{{ i }}" {% if i == 5 %}checked{% endif %}>
+                                <label for="rating{{ i }}">{{ i }}</label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="text">Текст отзыва:</label>
+                            <textarea name="text" id="text" rows="4" required placeholder="Напишите ваш отзыв..."></textarea>
+                        </div>
+
+                        <div id="sentimentPreview" class="sentiment-preview" style="display: none;">
+                            <strong>Предсказание:</strong>
+                            <span id="sentimentResult"></span>
+                            <span id="sentimentConfidence"></span>
+                        </div>
+
+                        <button type="button" class="btn btn-secondary" onclick="predictSentiment()">Проверить тональность</button>
+                        <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="column">
+                {% if recommendations %}
+                <div class="card">
+                    <h3>Рекомендации для вас</h3>
+                    <p class="card-subtitle">На основе ваших предпочтений</p>
+                    <ul class="recommendations-list">
+                        {% for rec in recommendations %}
+                        <li>
+                            <a href="{{ url_for('product_detail', product_name=rec.product) }}">
+                                {{ rec.product }}
+                                <span class="score">Оценка: {{ "%.2f"|format(rec.score) }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% else %}
+                <div class="card">
+                    <h3>Рекомендации</h3>
+                    <p class="info-message">Оставьте несколько отзывов, чтобы получить персональные рекомендации!</p>
+                </div>
+                {% endif %}
+
+                <div class="card">
+                    <h3>Популярные товары</h3>
+                    <ul class="products-list">
+                        {% for product in products[:5] %}
+                        <li><a href="{{ url_for('product_detail', product_name=product) }}">{{ product }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {% if recent_reviews %}
+        <div class="card">
+            <h3>Последние отзывы</h3>
+            <div class="reviews-list">
+                {% for review in recent_reviews %}
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="product-name">{{ review.product }}</span>
+                        <span class="rating">{{ review.rating }} звезд</span>
+                        {% if review.sentiment and review.sentiment == review.sentiment %}
+                        <span class="sentiment {{ 'positive' if review.sentiment == 'позитивный' else 'negative' }}">
+                            {{ review.sentiment }} ({{ "%.1f"|format(review.confidence) }}%)
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="review-text">{{ review.text }}</div>
+                    <div class="review-meta">
+                        <span>{{ review.user_id[:8] }}</span>
+                        <span>{{ review.date[:10] }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>ML-Продукт для анализа отзывов | Powered by Flask, scikit-learn, XGBoost</p>
+        </div>
+    </footer>
+
+    <script>
+        async function predictSentiment() {
+            const text = document.getElementById('text').value;
+            if (!text) {
+                alert('Введите текст отзыва');
+                return;
+            }
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                const preview = document.getElementById('sentimentPreview');
+                const result = document.getElementById('sentimentResult');
+                const confidence = document.getElementById('sentimentConfidence');
+
+                result.textContent = data.sentiment;
+                result.className = data.sentiment === 'позитивный' ? 'positive' : 'negative';
+                confidence.textContent = `(${data.confidence}% уверенности)`;
+
+                preview.style.display = 'block';
+            } catch (error) {
+                alert('Ошибка при предсказании: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

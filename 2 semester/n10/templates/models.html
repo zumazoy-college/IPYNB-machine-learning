@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сравнение моделей - ML-Продукт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">ML-Анализ Отзывов</h1>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Главная</a></li>
+                <li><a href="{{ url_for('statistics') }}">Статистика</a></li>
+                <li><a href="{{ url_for('models_page') }}" class="active">Модели</a></li>
+            </ul>
+            <div class="user-info">
+                <span>ID: {{ session.get('user_id', 'unknown')[:8] }}</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <h2>Сравнение моделей классификации</h2>
+
+        {% if no_data %}
+        <div class="card">
+            <p class="info-message">Недостаточно данных для обучения моделей. Необходимо минимум 10 отзывов с тональностью.</p>
+        </div>
+        {% else %}
+
+        <div class="card">
+            <h3>Таблица метрик</h3>
+            <p class="card-subtitle">Сравнение производительности различных алгоритмов машинного обучения</p>
+
+            <div class="table-responsive">
+                <table class="models-table">
+                    <thead>
+                        <tr>
+                            <th>Модель</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1-Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr {% if result.Model == best_model %}class="best-model"{% endif %}>
+                            <td>
+                                <strong>{{ result.Model }}</strong>
+                                {% if result.Model == best_model %}
+                                <span class="badge">Лучшая</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ "%.4f"|format(result.Accuracy) }}</td>
+                            <td>{{ "%.4f"|format(result.Precision) }}</td>
+                            <td>{{ "%.4f"|format(result.Recall) }}</td>
+                            <td>{{ "%.4f"|format(result.F1) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Визуальное сравнение</h3>
+            {% if comparison_img %}
+            <img src="data:image/png;base64,{{ comparison_img }}" alt="Сравнение моделей" class="chart-img">
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3>Выводы</h3>
+            <div class="conclusions">
+                <p><strong>Лучшая модель:</strong> <span class="highlight">{{ best_model }}</span></p>
+
+                <h4>Описание моделей:</h4>
+                <ul class="model-descriptions">
+                    <li>
+                        <strong>LogisticRegression:</strong> Простая и быстрая линейная модель, хорошо работает на текстовых данных.
+                        Подходит для базовой классификации с интерпретируемыми результатами.
+                    </li>
+                    <li>
+                        <strong>RandomForest:</strong> Ансамбль решающих деревьев, устойчив к переобучению.
+                        Хорошо справляется с нелинейными зависимостями и не требует масштабирования признаков.
+                    </li>
+                    <li>
+                        <strong>XGBoost:</strong> Градиентный бустинг, один из самых мощных алгоритмов.
+                        Часто показывает лучшие результаты на структурированных данных, но требует больше вычислительных ресурсов.
+                    </li>
+                </ul>
+
+                <h4>Метрики:</h4>
+                <ul class="metrics-descriptions">
+                    <li><strong>Accuracy:</strong> Доля правильных предсказаний от общего числа примеров</li>
+                    <li><strong>Precision:</strong> Из предсказанных позитивных отзывов, сколько действительно позитивных (точность)</li>
+                    <li><strong>Recall:</strong> Из всех реальных позитивных отзывов, сколько модель нашла (полнота)</li>
+                    <li><strong>F1-Score:</strong> Гармоническое среднее Precision и Recall (баланс точности и полноты)</li>
+                </ul>
+
+                <div class="conclusion-box">
+                    <p>
+                        На основе сравнения метрик, модель <strong>{{ best_model }}</strong> показала наилучшие результаты
+                        по F1-Score, что означает оптимальный баланс между точностью и полнотой классификации.
+                        Эта модель используется для предсказания тональности новых отзывов в системе.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>ML-Продукт для анализа отзывов | Powered by Flask, scikit-learn, XGBoost</p>
+        </div>
+    </footer>
+</body>
+</html>

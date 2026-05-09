@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика - ML-Продукт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">ML-Анализ Отзывов</h1>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Главная</a></li>
+                <li><a href="{{ url_for('statistics') }}" class="active">Статистика</a></li>
+                <li><a href="{{ url_for('models_page') }}">Модели</a></li>
+            </ul>
+            <div class="user-info">
+                <span>ID: {{ session.get('user_id', 'unknown')[:8] }}</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <h2>Статистика по товарам</h2>
+
+        {% if no_data %}
+        <div class="card">
+            <p class="info-message">Пока нет данных для отображения статистики. Оставьте несколько отзывов!</p>
+        </div>
+        {% else %}
+
+        <div class="card">
+            <h3>Статистика по товарам</h3>
+            <div class="table-responsive">
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Товар</th>
+                            <th>Средний рейтинг</th>
+                            <th>Всего отзывов</th>
+                            <th>Позитивных</th>
+                            <th>Негативных</th>
+                            <th>Доля позитива</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stat in product_stats %}
+                        <tr>
+                            <td><a href="{{ url_for('product_detail', product_name=stat.product) }}">{{ stat.product }}</a></td>
+                            <td>
+                                <span class="rating-badge">{{ "%.2f"|format(stat.avg_rating) }}</span>
+                            </td>
+                            <td>{{ stat.total_reviews }}</td>
+                            <td><span class="positive">{{ stat.positive_count }}</span></td>
+                            <td><span class="negative">{{ stat.negative_count }}</span></td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: {{ (stat.positive_ratio * 100)|int }}%"></div>
+                                    <span class="progress-text">{{ "%.1f"|format(stat.positive_ratio * 100) }}%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="two-column">
+            <div class="column">
+                {% if rating_dist_img %}
+                <div class="card">
+                    <h3>Распределение оценок</h3>
+                    <img src="data:image/png;base64,{{ rating_dist_img }}" alt="Распределение оценок" class="chart-img">
+                </div>
+                {% endif %}
+
+                {% if reviews_time_img %}
+                <div class="card">
+                    <h3>Динамика отзывов</h3>
+                    <img src="data:image/png;base64,{{ reviews_time_img }}" alt="Динамика отзывов" class="chart-img">
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="column">
+                {% if wordcloud_img %}
+                <div class="card">
+                    <h3>Облако слов</h3>
+                    <p class="card-subtitle">Наиболее часто встречающиеся слова в отзывах</p>
+                    <img src="data:image/png;base64,{{ wordcloud_img }}" alt="Облако слов" class="chart-img">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>ML-Продукт для анализа отзывов | Powered by Flask, scikit-learn, XGBoost</p>
+        </div>
+    </footer>
+</body>
+</html>
